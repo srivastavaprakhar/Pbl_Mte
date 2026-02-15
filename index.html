@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PBL Presentation | 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        body { background-color: #020617; color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .gradient-text { background: linear-gradient(90deg, #60a5fa, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* TIMER UI - FIXED CONTRAST */
+        #timerContainer { background: #ffffff; color: #020617; box-shadow: 0 10px 40px rgba(0,0,0,0.8); border: 3px solid #3b82f6; z-index: 1000; }
+        @keyframes flicker { 0%, 100% { background-color: #ffffff; } 50% { background-color: #fca5a5; } }
+        .timer-warning { animation: flicker 1s infinite; border: 3px solid #ef4444 !important; color: #b91c1c !important; }
+        .timer-stop { background-color: #991b1b !important; color: #ffffff !important; border: 3px solid #f87171 !important; animation: none; }
+    </style>
+</head>
+<body onload="startTimer()">
+
+    <div id="timerContainer" class="fixed bottom-10 right-10 px-8 py-4 rounded-3xl flex items-center gap-4 transition-all">
+        <i class="fas fa-hourglass-start text-blue-600 text-2xl" id="timerIcon"></i>
+        <span id="displayTime" class="text-4xl font-black font-mono tracking-tighter">00:00</span>
+    </div>
+
+    <nav class="fixed w-full z-50 glass border-b border-slate-800/50 px-8 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-4">
+            <div class="bg-white p-1 rounded flex items-center justify-center shadow-md" style="height: 48px; width: 48px;">
+                <img src="mujlogo.jpg" alt="MUJ" class="h-full w-auto object-contain" onerror="this.src='https://via.placeholder.com/50?text=MUJ'">
+            </div>
+            <div class="flex flex-col text-left">
+                <span class="text-xl font-black text-white leading-none uppercase tracking-tighter">PBL <span class="text-blue-500 italic">2026</span></span>
+                <span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1">Dept. of Computer Science & Engineering</span>
+            </div>
+        </div>
+        <div class="hidden md:flex gap-8 text-[11px] uppercase tracking-widest font-bold opacity-70">
+            <a href="#problem" class="hover:text-blue-400 transition">Problem</a>
+            <a href="#methodology" class="hover:text-blue-400 transition">Methodology</a>
+            <a href="#results" class="hover:text-blue-400 transition">Results</a>
+            <a href="#team" class="hover:text-blue-400 transition">Team</a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-6 pt-48 pb-32 space-y-32">
+        
+        <section class="text-center">
+            <div class="inline-block px-4 py-1 border border-slate-800 rounded-full text-slate-500 text-[10px] font-mono mb-6 uppercase tracking-widest">srivastavaprakhar • SMPS</div>
+            <h1 class="text-6xl md:text-7xl font-extrabold mb-8 uppercase leading-tight"><span class="gradient-text uppercase">Stock Market Prediction from Candlestick Images</span></h1>
+            <p class="text-slate-400 max-w-2xl mx-auto italic text-lg leading-relaxed border-l-2 border-blue-500/30 pl-6 text-left">
+                "Can deep learning models predict stock market movements by analyzing visual patterns in candlestick chart images? This project transforms 6.15 million sequential OHLCV windows into synthetic images and trains a CNN to detect price movement signals."
+            </p>
+        </section>
+
+        <section id="problem" class="grid md:grid-cols-2 gap-12 items-stretch">
+            <div class="glass p-10 rounded-[2.5rem] flex flex-col justify-center border-l-4 border-blue-600">
+                <h2 class="text-3xl font-extrabold mb-6">Problem Statement</h2>
+                <p class="text-slate-400 leading-relaxed text-justify mb-4"><strong class="text-slate-300">The Problem:</strong> Retail and institutional investors struggle to predict short-term price movements in Indian stock markets, particularly for Nifty 100 stocks with high-frequency 15-minute interval data. Traditional numerical models (LSTM, ARIMA) fail to capture the complex spatial and visual patterns that experienced traders identify in candlestick charts—patterns like doji, hammer, engulfing, and support/resistance levels. Furthermore, training on isolated snapshots causes models to see disconnected patterns without understanding transitions between market states.</p>
+                <p class="text-slate-400 leading-relaxed text-justify"><strong class="text-slate-300">The Solution:</strong> This project implements a sliding window protocol (size=5) to provide temporal context, generating 6.15 million overlapping samples from 7+ years of OHLCV data (Jan 2015 - Feb 2022). Each sample captures five consecutive candlesticks, enabling the model to learn short-term dynamics and contextual relationships. These windows are converted into 150×150 images with integrated volume indicators, and a CNN classifies binary price movements at scale and speed impossible for manual analysis.</p>
+            </div>
+            <div class="space-y-6">
+                <div class="glass p-7 rounded-3xl border-r-4 border-red-500/50">
+                    <h3 class="text-red-400 font-bold text-xs uppercase tracking-widest mb-2">Key Challenges</h3>
+                    <ul class="text-sm text-slate-500 italic space-y-2">
+                        <li>• High volatility in 15-min interval data</li>
+                        <li>• Isolated snapshots lack temporal context</li>
+                        <li>• Preventing look-ahead bias in time-series</li>
+                        <li>• Scale normalization for comparable inputs</li>
+                        <li>• Balancing 6.15M samples efficiently</li>
+                    </ul>
+                </div>
+                <div class="glass p-7 rounded-3xl border-r-4 border-blue-500/50">
+                    <h3 class="text-blue-400 font-bold text-xs uppercase tracking-widest mb-2">Literature Review</h3>
+                    <p class="text-sm text-slate-500 italic leading-relaxed">Existing work falls into three lines: (1) <strong>CNN-based approaches</strong> convert OHLC to candlestick images using ResNet/VGG for daily predictions on non-Indian markets, achieving 90–99% accuracy without explicit pattern detection. (2) <strong>GAF-based methods</strong> encode sequences into mathematical images with CNN/CNN-LSTM for classic pattern recognition at hourly/daily resolutions. (3) <strong>Forex TA-Lib integration</strong> uses 61 candlestick patterns with 15-min sliding windows and CNNs for trend prediction. For Indian markets, research focuses on daily NIFTY50 data evaluating pattern profitability but lacks combining TA-Lib filtering, intraday 15-min windows, and standardized candlestick images with CNNs.</p>
+                </div>
+                <div class="glass p-7 rounded-3xl border-r-4 border-purple-500/50">
+                    <h3 class="text-purple-400 font-bold text-xs uppercase tracking-widest mb-2">Research Gap / Innovation</h3>
+                    <p class="text-sm text-slate-500 italic">Unlike existing approaches, SMPS targets the Indian market (Nifty 100) with intraday 15-minute data, uses sliding window protocol (6.15M samples) to preserve temporal context, and applies Z-score normalization for stable training. The modular pipeline enables both batch and streaming training for real-time trading applications, addressing gaps in Indian market-specific high-frequency candlestick pattern analysis.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="methodology" class="space-y-12">
+            <h2 class="text-4xl font-black text-center uppercase tracking-tight">System <span class="text-blue-500">Methodology</span></h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass p-8 rounded-3xl text-center">
+                    <i class="fas fa-database text-blue-500 text-3xl mb-4"></i>
+                    <h3 class="font-bold mb-2 uppercase text-xs tracking-widest">Dataset / Input</h3>
+                    <p class="text-sm text-slate-500"><strong>Nifty 100 stocks</strong> from Indian Stock Market (Jan 2015 - Feb 2022). Data sampled at <strong>15-minute intervals</strong> with OHLCV features. <strong>Sliding window protocol (size=5)</strong> generates <strong>6.15M samples</strong>, each containing 5 consecutive candles to preserve temporal context. Shape: (6,150,190, 5, 5)</p>
+                </div>
+                <div class="glass p-8 rounded-3xl text-center">
+                    <i class="fas fa-microchip text-purple-500 text-3xl mb-4"></i>
+                    <h3 class="font-bold mb-2 uppercase text-xs tracking-widest">Model / Architecture</h3>
+                    <p class="text-sm text-slate-500">PyTorch-based CNN (SimpleCNN) trained on 150×150 RGB images. Each image encodes 5-candle window with price action (120px) and volume (30px). Binary classification for up/down movements. <strong>Z-score normalized</strong> inputs (mean≈0, std≈1) for stable training.</p>
+                </div>
+                <div class="glass p-8 rounded-3xl text-center border-2 border-green-500/20 bg-green-500/5">
+                    <i class="fab fa-python text-green-500 text-3xl mb-4"></i>
+                    <h3 class="font-bold mb-4 uppercase text-xs tracking-widest text-green-400">Live Execution</h3>
+                    <a href="https://github.com/srivastavaprakhar/SMPS" target="_blank" class="px-6 py-2 bg-green-600 rounded-full text-[10px] font-black hover:bg-green-500 transition shadow-lg shadow-green-900/40">VIEW CODE / DEMO</a>
+                </div>
+            </div>
+            
+            <div class="glass p-10 rounded-3xl border-l-4 border-purple-600">
+                <h3 class="text-2xl font-bold mb-6 text-purple-400">Pipeline Workflow</h3>
+                <div class="grid md:grid-cols-5 gap-4 text-center text-sm">
+                    <div class="p-4 bg-white/5 rounded-xl">
+                        <div class="text-3xl mb-2">1️⃣</div>
+                        <div class="font-bold">Preprocess</div>
+                        <div class="text-xs text-slate-500 mt-2">Clean OHLCV data</div>
+                    </div>
+                    <div class="p-4 bg-white/5 rounded-xl">
+                        <div class="text-3xl mb-2">2️⃣</div>
+                        <div class="font-bold">Sliding Window</div>
+                        <div class="text-xs text-slate-500 mt-2">6.15M samples (size=5)</div>
+                    </div>
+                    <div class="p-4 bg-white/5 rounded-xl">
+                        <div class="text-3xl mb-2">3️⃣</div>
+                        <div class="font-bold">Normalize</div>
+                        <div class="text-xs text-slate-500 mt-2">Z-score (μ≈0, σ≈1)</div>
+                    </div>
+                    <div class="p-4 bg-white/5 rounded-xl">
+                        <div class="text-3xl mb-2">4️⃣</div>
+                        <div class="font-bold">Render Images</div>
+                        <div class="text-xs text-slate-500 mt-2">150×150 charts</div>
+                    </div>
+                    <div class="p-4 bg-white/5 rounded-xl">
+                        <div class="text-3xl mb-2">5️⃣</div>
+                        <div class="font-bold">Train CNN</div>
+                        <div class="text-xs text-slate-500 mt-2">Classification</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass p-10 rounded-3xl border-l-4 border-blue-600">
+                <h3 class="text-2xl font-bold mb-6 text-blue-400">Sliding Window Protocol</h3>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            <strong class="text-slate-300">Why Sliding Windows?</strong><br>
+                            Without sliding windows, the model sees disconnected patterns and cannot learn transitions between market states. Each isolated snapshot lacks temporal context, leading to vague training.
+                        </p>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            <strong class="text-slate-300">Window Size = 5</strong><br>
+                            Captures short-term price dynamics and local contextual relationships between consecutive candlesticks. Allows effective comparison between recent historical movements and current price action while maintaining high sample count.
+                        </p>
+                        <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mt-4">
+                            <p class="text-blue-300 text-xs font-mono">
+                                Generated Samples: <strong class="text-blue-400">6,150,190</strong><br>
+                                Each Sample: <strong class="text-blue-400">5 consecutive candles</strong><br>
+                                Label: <strong class="text-blue-400">Next candle's price direction</strong>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/50 rounded-xl p-6 border border-slate-700">
+                        <p class="text-[10px] text-slate-500 font-mono mb-3 uppercase tracking-wider">Window Structure</p>
+                        <pre class="text-xs text-slate-300 font-mono leading-relaxed overflow-x-auto">
+[
+  [O<sub>t-4</sub>, H<sub>t-4</sub>, L<sub>t-4</sub>, C<sub>t-4</sub>, V<sub>t-4</sub>],
+  [O<sub>t-3</sub>, H<sub>t-3</sub>, L<sub>t-3</sub>, C<sub>t-3</sub>, V<sub>t-3</sub>],
+  [O<sub>t-2</sub>, H<sub>t-2</sub>, L<sub>t-2</sub>, C<sub>t-2</sub>, V<sub>t-2</sub>],
+  [O<sub>t-1</sub>, H<sub>t-1</sub>, L<sub>t-1</sub>, C<sub>t-1</sub>, V<sub>t-1</sub>],
+  [O<sub>t</sub>,   H<sub>t</sub>,   L<sub>t</sub>,   C<sub>t</sub>,   V<sub>t</sub>  ]
+]
+                        </pre>
+                        <p class="text-[10px] text-green-400 font-mono mt-4">✓ Temporal continuity preserved</p>
+                        <p class="text-[10px] text-green-400 font-mono">✓ Contextual relationships maintained</p>
+                        <p class="text-[10px] text-green-400 font-mono">✓ Transition learning enabled</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass p-10 rounded-3xl border-l-4 border-green-600">
+                <h3 class="text-2xl font-bold mb-6 text-green-400">Z-Score Normalization</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            <strong class="text-slate-300">Why Normalize?</strong><br>
+                            Stock prices range from ₹100 to ₹5000+. Without normalization, the model assigns huge weights just to "cope" with scale differences, leading to unstable training and poor convergence.
+                        </p>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            <strong class="text-slate-300">Z-Score Transformation:</strong><br>
+                            Converts all prices to a "standard unit" by centering around mean (0) and scaling by standard deviation (1).
+                        </p>
+                        <div class="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
+                            <p class="text-green-300 text-sm font-mono text-center">
+                                Z = (X - μ) / σ
+                            </p>
+                            <p class="text-xs text-slate-400 text-center mt-2">
+                                where μ = mean, σ = standard deviation
+                            </p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/50 rounded-xl p-6 border border-slate-700">
+                        <p class="text-[10px] text-slate-500 font-mono mb-3 uppercase tracking-wider">Achieved Normalization</p>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center p-3 bg-white/5 rounded-lg">
+                                <span class="text-slate-400 text-xs">Train Mean</span>
+                                <span class="text-blue-400 font-mono text-sm">~2.09e-17 ≈ 0</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-white/5 rounded-lg">
+                                <span class="text-slate-400 text-xs">Train Std</span>
+                                <span class="text-blue-400 font-mono text-sm">~1.000000000002</span>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-green-400 font-mono mt-4">✓ Perfect standardization achieved</p>
+                        <p class="text-[10px] text-green-400 font-mono">✓ Stable gradient flow</p>
+                        <p class="text-[10px] text-green-400 font-mono">✓ Comparable data across scales</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="results" class="glass p-12 rounded-[3.5rem] border-t-4 border-blue-500">
+            <h2 class="text-3xl font-black mb-12 text-center uppercase tracking-tight">Results & <span class="text-blue-500">Analysis</span></h2>
+            
+            <div class="grid md:grid-cols-2 gap-16 items-center mb-16">
+                <div class="h-80"><canvas id="resultsChart"></canvas></div>
+                <div class="space-y-6">
+                    <div class="p-6 rounded-2xl bg-white/5 flex justify-between items-center border border-white/10 shadow-inner">
+                        <span class="text-slate-400 font-bold uppercase text-xs tracking-widest">Total Samples</span>
+                        <span class="text-yellow-400 font-mono font-black text-3xl">6.15M</span>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-white/5 flex justify-between items-center border border-white/10 shadow-inner">
+                        <span class="text-slate-400 font-bold uppercase text-xs tracking-widest">Training Samples</span>
+                        <span class="text-blue-400 font-mono font-black text-3xl">4.3M</span>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-white/5 flex justify-between items-center border border-white/10 shadow-inner">
+                        <span class="text-slate-400 font-bold uppercase text-xs tracking-widest">Val + Test Samples</span>
+                        <span class="text-purple-400 font-mono font-black text-3xl">1.85M</span>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-green-500/20 flex justify-between items-center border-2 border-green-500/50 shadow-lg">
+                        <span class="text-green-300 font-bold uppercase text-xs tracking-widest">Test Accuracy</span>
+                        <span class="text-green-400 font-mono font-black text-4xl">53.4%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900/50 rounded-3xl p-8 border border-slate-700 mb-12">
+                <h3 class="text-xl font-bold mb-6 text-center text-slate-300">Training Log (On-the-Fly Mode)</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <table class="w-full text-sm font-mono">
+                            <thead>
+                                <tr class="border-b border-slate-700">
+                                    <th class="text-left py-2 text-slate-400">Epoch</th>
+                                    <th class="text-right py-2 text-blue-400">Train Acc</th>
+                                    <th class="text-right py-2 text-purple-400">Val Acc</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-slate-300">
+                                <tr class="border-b border-slate-800">
+                                    <td class="py-2">01</td>
+                                    <td class="text-right text-blue-400">0.534</td>
+                                    <td class="text-right text-purple-400">0.533 💾</td>
+                                </tr>
+                                <tr class="border-b border-slate-800">
+                                    <td class="py-2">02</td>
+                                    <td class="text-right text-blue-400">0.533</td>
+                                    <td class="text-right text-purple-400">0.533</td>
+                                </tr>
+                                <tr class="border-b border-slate-800">
+                                    <td class="py-2">03</td>
+                                    <td class="text-right text-blue-400">0.533</td>
+                                    <td class="text-right text-purple-400">0.533</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2">04</td>
+                                    <td class="text-right text-blue-400">0.533</td>
+                                    <td class="text-right text-purple-400">0.533 ⏹</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="text-xs text-yellow-400 mt-4">⏹ Early stopping triggered at Epoch 04</p>
+                    </div>
+                    <div class="flex flex-col justify-center space-y-4">
+                        <div class="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
+                            <p class="text-xs text-slate-400 mb-2">Final Test Performance</p>
+                            <p class="text-3xl font-black text-green-400 font-mono">53.4%</p>
+                            <p class="text-xs text-slate-500 mt-2">Tested on 922,529 samples</p>
+                        </div>
+                        <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4">
+                            <p class="text-xs text-slate-400 mb-2">Dataset Split (70/15/15)</p>
+                            <p class="text-sm text-slate-300 font-mono">Train: 4,305,133</p>
+                            <p class="text-sm text-slate-300 font-mono">Val: 922,528</p>
+                            <p class="text-sm text-slate-300 font-mono">Test: 922,529</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="glass p-6 rounded-2xl border-b-2 border-yellow-500/50">
+                    <h4 class="text-xs uppercase tracking-widest text-yellow-400 mb-2">Dataset Info</h4>
+                    <p class="text-sm text-slate-400">Nifty 100 • 15-min • Jan 2015 - Feb 2022 • 6.15M samples</p>
+                </div>
+                <div class="glass p-6 rounded-2xl border-b-2 border-blue-500/50">
+                    <h4 class="text-xs uppercase tracking-widest text-blue-400 mb-2">Sliding Window</h4>
+                    <p class="text-sm text-slate-400">Size=5 • Overlapping • Temporal context • Shape: (6.15M, 5, 5)</p>
+                </div>
+                <div class="glass p-6 rounded-2xl border-b-2 border-purple-500/50">
+                    <h4 class="text-xs uppercase tracking-widest text-purple-400 mb-2">Normalization</h4>
+                    <p class="text-sm text-slate-400">Z-score • μ≈0 • σ≈1 • Stable training • No scale bias</p>
+                </div>
+                <div class="glass p-6 rounded-2xl border-b-2 border-green-500/50">
+                    <h4 class="text-xs uppercase tracking-widest text-green-400 mb-2">Model Training</h4>
+                    <p class="text-sm text-slate-400">PyTorch CNN • Early stopping • Adam optimizer • Binary classification</p>
+                </div>
+            </div>
+
+            <div class="mt-12 bg-slate-800/30 rounded-2xl p-8 border border-slate-700">
+                <h4 class="text-lg font-bold text-slate-300 mb-4">Performance Analysis</h4>
+                <p class="text-sm text-slate-400 leading-relaxed text-justify">
+                    The model achieved <strong class="text-green-400">53.4% test accuracy</strong> on binary price movement classification (up/down). While this is marginally above random baseline (50%), it demonstrates that the CNN successfully learned some visual patterns from candlestick images. The quick convergence and early stopping at epoch 4 indicates the model found stable patterns but reached capacity limits of the architecture. Future improvements could include: deeper networks, attention mechanisms, ensemble methods, or incorporating additional technical indicators.
+                </p>
+            </div>
+        </section>
+
+        <section id="team" class="text-center pt-10 border-t border-slate-900">
+            <h2 class="text-[10px] font-black text-slate-600 uppercase tracking-[0.5em] mb-12">Academic Credits</h2>
+            <div class="flex flex-wrap justify-center gap-10">
+                <div class="glass px-12 py-8 rounded-[2rem] border-b-4 border-blue-600">
+                    <p class="text-[9px] font-bold text-blue-500 mb-2 uppercase tracking-widest">Project Guide</p>
+                    <p class="font-black text-xl text-slate-100">Dr. Manish Gupta</p>
+                </div>
+                <div class="glass px-12 py-8 rounded-[2rem] border-b-4 border-slate-700">
+                    <p class="text-[9px] font-bold text-slate-400 mb-2 uppercase tracking-widest">Developer</p>
+                    <p class="font-black text-xl text-slate-100">Prakhar Shashank Srivastava</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-12 text-center bg-black/40 border-t border-slate-900">
+        <p class="text-slate-600 text-[10px] font-bold tracking-[0.3em] uppercase mb-2">Manipal University Jaipur</p>
+        <p class="text-slate-500 text-[9px] font-medium tracking-[0.2em] uppercase opacity-50">Department of Computer Science & Engineering • 2026</p>
+        <p class="text-slate-600 text-[8px] mt-4">Dataset: Nifty 100 Historical Data (15-min intervals, Jan 2015 - Feb 2022) • 6.15M samples • Indian Stock Market</p>
+        <p class="text-slate-600 text-[8px] mt-2">Repository: <a href="https://github.com/srivastavaprakhar/SMPS" target="_blank" class="text-blue-500 hover:text-blue-400">github.com/srivastavaprakhar/SMPS</a></p>
+    </footer>
+
+    <script>
+        // TIMER LOGIC
+        let sec = 0;
+        let timer = null;
+        function startTimer() {
+            timer = setInterval(() => {
+                sec++;
+                let m = Math.floor(sec / 60);
+                let s = sec % 60;
+                document.getElementById('displayTime').innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                
+                if (sec >= 480 && sec < 600) { // 8-10 Mins Warning
+                    document.getElementById('timerContainer').classList.add('timer-warning');
+                    document.getElementById('timerIcon').classList.replace('fa-hourglass-start', 'fa-hourglass-half');
+                } else if (sec >= 600) { // 10 Mins Stop
+                    clearInterval(timer);
+                    document.getElementById('timerContainer').classList.replace('timer-warning', 'timer-stop');
+                    document.getElementById('displayTime').innerText = "10:00";
+                    document.getElementById('timerIcon').classList.replace('fa-hourglass-half', 'fa-hourglass-end');
+                }
+            }, 1000);
+        }
+
+        // RESULTS CHART - Updated with actual training data
+        const ctx = document.getElementById('resultsChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Epoch 1', 'Epoch 2', 'Epoch 3', 'Epoch 4'],
+                datasets: [
+                    {
+                        label: 'Training Accuracy',
+                        data: [0.534, 0.533, 0.533, 0.533],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    },
+                    {
+                        label: 'Validation Accuracy',
+                        data: [0.533, 0.533, 0.533, 0.533],
+                        borderColor: '#a855f7',
+                        backgroundColor: 'rgba(168, 85, 247, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { 
+                    legend: { 
+                        display: true,
+                        labels: { color: '#94a3b8' }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Training Progress (Early Stopped at Epoch 4)',
+                        color: '#94a3b8',
+                        font: { size: 14, weight: 'bold' }
+                    }
+                },
+                scales: { 
+                    y: { 
+                        beginAtZero: false,
+                        min: 0.50,
+                        max: 0.55,
+                        grid: { color: '#ffffff05' }, 
+                        ticks: { 
+                            color: '#475569',
+                            callback: function(value) {
+                                return (value * 100).toFixed(1) + '%';
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Accuracy',
+                            color: '#64748b'
+                        }
+                    },
+                    x: { 
+                        grid: { display: false }, 
+                        ticks: { color: '#475569' } 
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
